@@ -60,6 +60,30 @@ def union(x,y):
     return True
 
 
+#2d prefix sum
+def prefixSum2D(mat):
+    n = len(mat)
+    m = len(mat[0])
+    for i in range(1,n):
+        mat[i][0] += mat[i-1][0]
+    for j in range(1,m):
+        mat[0][j] += mat[0][j-1]
+    for i in range(1,n):
+        for j in range(1,m):
+            mat[i][j] += mat[i-1][j] + mat[i][j-1] - mat[i-1][j-1]
+    return mat
+
+#range sum query
+def rangeSum(mat, r1, c1, r2, c2):
+    sm = mat[r2][c2]
+    if r1 > 0:
+        sm -= mat[r1-1][c2]
+    if c1 > 0:
+        sm -= mat[r2][c1-1]
+    if r1 > 0 and c1 > 0:
+        sm += mat[r1-1][c1-1]
+    return sm
+
 class Fenwick_Tree:
     def __init__(self, n: int, idx_comp = None | list[int], str_protocol = False) -> None:
         self.tree = [0]*n
