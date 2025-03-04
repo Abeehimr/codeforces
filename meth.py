@@ -35,15 +35,12 @@ def divceil(a,b):
     return a//b + int(a%b > 0)
 
 def factors(n):
-    out = []
     i = 1
     while i*i <= n:
         if n%i == 0:
-            out.append(i)
-            if i*i < n: out.append(n//i)
+            yield i
+            if i*i < n:yield n//i
         i += 1
-    out.sort()
-    return out
 
 mx = 2*(10**5) + 1
 p=  [i for i in range(mx)]
