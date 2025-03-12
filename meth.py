@@ -32,7 +32,8 @@ def getcount(n, k):
     return count
 
 def divceil(a,b):
-    return a//b + int(a%b > 0)
+    
+    return (a+b-1)//b
 
 def factors(n):
     i = 1
