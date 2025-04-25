@@ -33,9 +33,6 @@ def print_2d_list(matrix):
         cprint(" ".join(map(str, row)))
 if dfsss:
     from types import GeneratorType
-
-
-
     def bootstrap(f, stack=[]):
         def wrappedfunc(*args, **kwargs):
             if stack:

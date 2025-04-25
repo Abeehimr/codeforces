@@ -41,8 +41,9 @@
             "command": "g++",
             "args": [
                 "${relativeFile}",
-                "-O3", "-DLOCAL","-std=c++17",
-
+                "-O3",
+                "-DLOCAL",
+                "-std=c++17",
                 "-o",
                 "${fileBasenameNoExtension}.out"
             ],
