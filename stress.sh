@@ -1,7 +1,7 @@
 #! /bin/bash
 
 while true; do
-    python $1 > output.txt
+    python $1 > input.txt
 
     brute=$(python $2 < input.txt)
     actual=$(python $3 < input.txt)
