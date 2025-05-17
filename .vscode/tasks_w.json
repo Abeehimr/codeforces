@@ -1,0 +1,52 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Python",
+            "type": "shell",
+            "command": "python ${relativeFile} < in.txt > out.txt 2>&1",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "C++",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "${relativeFile}",
+                "-O3",
+                "-DLOCAL",
+                "-std=c++17",
+                "-o",
+                "${fileBasenameNoExtension}.exe",
+                "2>out.txt"
+
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "silent"
+            }
+        },
+        {
+            "label": "Run C++",
+            "type": "shell",
+            "command": ".\\${fileBasenameNoExtension}.exe < in.txt > out.txt 2>&1",
+            "dependsOn": "C++",
+            "presentation": {
+                "reveal": "never"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}
