@@ -116,3 +116,16 @@ def nextPermutation(nums):
         j-= 1
     nums[i],nums[j] = nums[j],nums[i]
     nums[i+1:] = nums[i+1:][::-1]
+
+def compute_totient(n):
+    result = n
+    p = 2
+    while p * p <= n:
+        if n % p == 0:
+            while n % p == 0:
+                n //= p
+            result -= result // p
+        p += 1
+    if n > 1:
+        result -= result // n
+    return result

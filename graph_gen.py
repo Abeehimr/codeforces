@@ -37,13 +37,14 @@ def generate_connected_graph(n, extra_edges=0):
 
     return edges
 
-
-N = random.randint(2, 1000)
-extra = random.randint(0, 1000)
-edges = generate_connected_graph(N, extra)
-print(N, len(edges))
-for u, v, w in edges:
-    print(u, v, w)
+M = random.randint(1, 20)
+print(M)
+for _ in range(M):
+    N = random.randint(2, 20000)
+    edges = generate_connected_graph(N, 0)
+    print(N)
+    for u, v, w in edges:
+        print(u, v)
 
 
 # for u, v, w in edges:
