@@ -104,6 +104,20 @@ def po(base,power):
         base *= base
     return out
 
+def inclusion_exclusion(n, l):
+    ans = 0
+    for i in range(1, 1 << len(l)):
+        bits = bin(i).count('1')
+        lcm = 1
+        for j in range(len(l)):
+            if i & (1 << j):
+                lcm = lcm * l[j] // gcd(lcm, l[j])
+        if bits % 2 == 1:
+            ans += n // lcm
+        else:
+            ans -= n // lcm
+    return ans
+
 def nextPermutation(nums):
     i = len(nums) - 2
     while(nums[i] >= nums[i+1] and i > -1):
