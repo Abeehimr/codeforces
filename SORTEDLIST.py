@@ -131,5 +131,7 @@ s.insert(1)
 s.insert(3)
 s.insert(10)
 
+print(len(s))
+print(s[len(s)//2])
 
 print(s.lower_bound(20))
