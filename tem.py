@@ -8,7 +8,7 @@ MOD1 = 998_244_353
 def solve(I):
     N, = map( int , input().strip().split() )
     arr = list( map( int , input().strip().split() ) )
-    mat = [list(map(int,input().strip().split())) for _ in range(n)]
+    mat = [list(map(int,input().strip().split())) for _ in range(N)]
 
 
 
