@@ -104,7 +104,7 @@ def po(base,power):
         base *= base
     return out
 
-def inclusion_exclusion(n, l):
+def PIE(n, l):
     ans = 0
     for i in range(1, 1 << len(l)):
         bits = bin(i).count('1')
@@ -117,6 +117,26 @@ def inclusion_exclusion(n, l):
         else:
             ans -= n // lcm
     return ans
+
+from math import comb
+def GPIE(arr,k, l):
+    N = len(arr)
+    out = 0
+    for msk in range(1, 1 << N):
+        r = msk.bit_count()
+        if r < k:
+            continue
+        lc = 1
+        for j in range(N):
+            if msk & (1 << j):
+                lc = lc // gcd(lc, arr[j]) * arr[j]
+            
+            if (r - k)&1:
+                out -= (l//lc)*comb(r,k)
+            else:
+                out += (l//lc)*comb(r,k)
+    return out
+
 
 def nextPermutation(nums):
     i = len(nums) - 2

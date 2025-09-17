@@ -1,22 +1,11 @@
 
 class SegmentTree:
-    def __init__(self, n: int,defult = 0,func = max, idx_comp = None , str_protocol = False) -> None:
+    def __init__(self, n: int,defult = 0,func = max) -> None:
         self.tree = [defult]*(2*n)
         self.n = n
-        self.str_protocol = str_protocol
         self.func = func
         self.defult = defult
-        if idx_comp is not None:
-            self._idx_hash(idx_comp)
 
-
-    def _idx_hash(self,arr):
-        self.idx = {}
-        for i in range(self.n):
-            v = arr[i]
-            if self.str_protocol:
-                v = str(v)
-            self.idx[v] = i
 
     def make(self,l):
         for i,v in enumerate(l):
@@ -25,21 +14,10 @@ class SegmentTree:
         for i in range(self.n-1,0,-1):
             self.tree[i] = self.func(self.tree[2*i],self.tree[2*i+1])
 
-    def _get_index(self,i: int) -> int:
-        if hasattr(self,'idx'):
-            if self.str_protocol:
-                i = str(i)
-            if i not in self.idx:
-                raise IndexError
-            i = self.idx[i]
-
-        if i >= self.n or i < -1:
-            raise IndexError
-        return i
 
     def sum(self,l = None , r = None) -> int:
-        l = (self._get_index(l) + self.n) if l is not None else (self.n)
-        r = (self._get_index(r) + self.n) if r is not None else (2*self.n - 1)
+        l = (l + self.n) if l is not None else (self.n)
+        r = (r + self.n) if r is not None else (2*self.n - 1)
 
         sm = self.defult
         while l <= r:
@@ -57,7 +35,7 @@ class SegmentTree:
 
 
     def add(self,i: int , v) -> None:
-        i = self._get_index(i) + self.n
+        i = i + self.n
         self.tree[i] = v
         i >>= 1
         while i >= 1:
