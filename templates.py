@@ -85,73 +85,26 @@ def rangeSum(mat, r1, c1, r2, c2):
     return sm
 
 class Fenwick_Tree:
-    def __init__(self, n: int, idx_comp = None | list[int], str_protocol = False) -> None:
+    def __init__(self, n: int) -> None:
         self.tree = [0]*n
         self.n = n
-        self.str_protocol = str_protocol
-        if idx_comp is not None:
-            self._idx_hash(idx_comp)
 
-
-    def _idx_hash(self,arr):
-        self.idx = {}
-        for i in range(self.n):
-            v = arr[i]
-            if self.str_protocol:
-                v = str(v)
-            self.idx[v] = i
 
 
     def sum(self,i: int) -> int:
-        if hasattr(self,'idx'):
-            if self.str_protocol:
-                i = str(i)
-            if i not in self.idx:
-                raise IndexError
-            i = self.idx[i]
-
-        if i >= self.n or i < -1:
-            raise IndexError
         out = 0
         while i >= 0:
             out += self.tree[i]
             i = (i&(i+1))-1
         return out
 
-    def add(self,i: int , v: int) -> None:
-        if hasattr(self,'idx'):
-            if self.str_protocol:
-                i = str(i)
-            if i not in self.idx:
-                raise IndexError
-            i = self.idx[i]
-
-        if i >= self.n or i < -1:
-            raise IndexError
-        
+    def add(self,i: int , v: int) -> None:        
         while i < self.n:
             self.tree[i] += v
             i |= i + 1
 
 
 
-from heapq import heappush, heappop
-class Hold:
-    def __init__(self,n,s) -> None:
-        self.h = []
-        self.n = n
-        self.sm = s
-
-    def add(self,v):
-        if len(self.h) < self.n:
-            heappush(self.h,v)
-            self.sm += v        
-        else:
-            heappush(self.h,v)
-            self.sm += v - heappop(self.h)
-    
-    def q(self):
-        return self.sm
     
 
 def nextPermutation(nums):
@@ -192,31 +145,3 @@ class PolynomialHash:
                 return self.h[b]
         return (self.h[b] - self.h[a - 1] * self.p[b - a + 1]) % self.B
     
-
-class latin:
-    def __init__(self):
-        self.h = [0]*26
-    
-    def add(self,c):
-        self.h[ord(c)-ord('a')] += 1
-
-    def remove(self,c):
-        self.h[ord(c)-ord('a')] -= 1
-
-    def __eq__(self,other):
-        return self.h == other.h
-
-    def contains(self,other):
-        for i in range(26):
-            if self.h[i] < other.h[i]:
-                return False
-        return True
-    
-    def copy(self,other):
-        self.h = other.h.copy()
-
-    def cnt(self):
-        return sum(self.h)
-    
-    def __repr__(self):
-        return str(self.h)

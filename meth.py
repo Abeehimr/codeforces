@@ -19,7 +19,7 @@ def msb(n):
         out += 1
     return out
 
-def getcount(n, k):
+def getcount(N, k):
     """count number from 0 to N where kth bit is set"""
     bit_length = 1 << k  # Equivalent to 2^k
     cycle_length = bit_length<<1  # Equivalent to 2^(k+1)
@@ -131,10 +131,10 @@ def GPIE(arr,k, l):
             if msk & (1 << j):
                 lc = lc // gcd(lc, arr[j]) * arr[j]
             
-            if (r - k)&1:
-                out -= (l//lc)*comb(r,k)
-            else:
-                out += (l//lc)*comb(r,k)
+        if (r - k)&1:
+            out -= (l//lc)*comb(r,k)
+        else:
+            out += (l//lc)*comb(r,k)
     return out
 
 
