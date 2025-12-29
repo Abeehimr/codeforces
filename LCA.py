@@ -6,7 +6,7 @@ class LCA:
         self.LOG = n.bit_length()  # log2(n) rounded up
         self.up = [[-1] * self.LOG for _ in range(n)]
         self.depth = [0] * n
-        self.adj = defaultdict(list)
+        self.adj = [[] for _ in range(n)]
 
     def add_edge(self, u, v):
         self.adj[u].append(v)
@@ -49,3 +49,19 @@ class LCA:
                 v = self.up[v][i]
         
         return self.up[u][0]
+
+    def dist(self,u,v):
+        lca = self.get_lca(u,v)
+        return self.depth[u] + self.depth[v] - 2*self.depth[lca]
+    
+    def on_path(self,a,b,c):
+        # is b on path a to c
+        return self.dist(a,b) + self.dist(b,c) == self.dist(a,c)
+    
+    def child(self,a,b):
+        # get child of a on path to b
+        diff = self.depth[b] - self.depth[a] - 1
+        for i in range(self.LOG):
+            if diff & (1 << i):
+                b = self.up[b][i]
+        return b

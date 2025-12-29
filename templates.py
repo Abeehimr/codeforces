@@ -145,3 +145,31 @@ class PolynomialHash:
                 return self.h[b]
         return (self.h[b] - self.h[a - 1] * self.p[b - a + 1]) % self.B
     
+
+
+class Fenwick_Tree_2D:
+    def __init__(self,n,m):
+        self.n, self.m = n, m
+        self.tree = [[0] * (m + 1) for _ in range(n + 1)]
+    def query(self, x, y):
+        sum_val = 0
+        i = x
+        while i >= 0:
+            j = y
+            while j >= 0:
+                sum_val += self.tree[i][j]
+                j = (j & (j + 1)) - 1
+            i = (i & (i + 1)) - 1
+        return sum_val
+
+    def update(self, x, y, delta):
+        i = x
+        while i < self.n:
+            j = y
+            while j < self.m:
+                self.tree[i][j] += delta
+                j |= j + 1
+            i |= i + 1
+
+    def range_query(self, x1, y1, x2, y2):
+        return (self.query(x2, y2) - self.query(x1 - 1, y2) - self.query(x2, y1 - 1) + self.query(x1 - 1, y1 - 1))
