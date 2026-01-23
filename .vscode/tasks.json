@@ -4,14 +4,7 @@
         {
             "label": "Python",
             "type": "shell",
-            "command": "python3",
-            "args": [
-                "${relativeFile}",
-                "<",
-                "input.txt",
-                ">",
-                "output.txt"
-            ],
+            "command": "python3 ${relativeFile} < input.txt > output.txt",
             "presentation": {
                 "reveal": "silent"
             },
@@ -38,15 +31,7 @@
         {
             "label": "C++",
             "type": "shell",
-            "command": "g++",
-            "args": [
-                "${relativeFile}",
-                "-O3",
-                "-DLOCAL",
-                "-std=c++17",
-                "-o",
-                "${fileBasenameNoExtension}.out"
-            ],
+            "command": "g++ ${relativeFile} -std=c++17 -O0 -g -Wall -Wextra -Wshadow -fsanitize=address,undefined -o ${fileBasenameNoExtension}.out",
             "group": {
                 "kind": "build",
                 "isDefault": false
@@ -82,13 +67,7 @@
         {
             "label": "Run C++",
             "type": "shell",
-            "command": "./${fileBasenameNoExtension}.out",
-            "args": [
-                "<",
-                "input.txt",
-                ">",
-                "output.txt"
-            ],
+            "command": "./${fileBasenameNoExtension}.out < input.txt > output.txt",
             "dependsOn": "C++",
             "presentation": {
                 "reveal": "never"

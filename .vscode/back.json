@@ -28,7 +28,7 @@
         {
             "label": "Run C++",
             "type": "shell",
-            "command": ".\\${fileBasenameNoExtension}.out < input.txt > output.txt",
+            "command": "./${fileBasenameNoExtension}.out < input.txt > output.txt",
             "dependsOn": "C++",
             "presentation": {
                 "reveal": "never"

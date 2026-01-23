@@ -1,33 +1,4 @@
-# t cases
-for _ in range(int(input().strip())):
-    #ignore this ...
-    ...
-#array of ints
-n, = map( int , input().strip().split() )
-a = list( map( int , input().strip().split() ) )
-
-
-#space separated input
-_ = map( int , input().strip().split() )
-
-#string input
-s = input().strip()
-
-#int input
-n = int(input().strip())
-
-#matrix of ints
-n,m = map( int , input().strip().split() )
-mat = [list(map(int,input().strip().split())) for _ in range(n)]
-
-#matrix of char no space
-n,m = map( int , input().strip().split() )
-mat = [input().strip() for _ in range(n)]
-
-#matrix of char with space
-n,m = map( int , input().strip().split() )
-mat = [list(input().strip().split()) for _ in range(n)]
-
+n = 10
 import sys
 def ask(a,b):
     print(f'? {a} {b}')

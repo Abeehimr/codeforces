@@ -43,75 +43,93 @@ class SegmentTree:
             i >>= 1
 
 
+class LazySegTree:
+    def __init__(self, n, ID, LID):
+        self.n = n
+        self.ID = ID      # identity for merge
+        self.LID = LID    # identity for lazy
+        self.st = [ID] * (4 * n)
+        self.lz = [LID] * (4 * n)
 
-class LazySegmentTree:
-    def __init__(self, arr):
-        self.n = len(arr)
-        self.s = [0] * (4 * self.n)   # sum
-        self.z = [0] * (4 * self.n)   # lazy
-        self._build(1, 0, self.n - 1, arr)
+    # ===== CUSTOMIZE THESE 3 =====
+    def merge(self, a, b):
+        return a + b
 
-    def _build(self, k, x, y, arr):
-        if x == y:
-            self.s[k] = arr[x]
+    def apply(self, p, v, l, r):
+        # range add affects sum by (len * v)
+        self.st[p] += (r - l + 1) * v
+
+    def compose(self, oldV, newV):
+        # range add: add lazies
+        return oldV + newV
+    # =============================
+
+    def push(self, p, l, r):
+        if self.lz[p] == self.LID:
             return
-        d = (x + y) // 2
-        self._build(2 * k, x, d, arr)
-        self._build(2 * k + 1, d + 1, y, arr)
-        self.s[k] = self.s[2 * k] + self.s[2 * k + 1]
+        m = (l + r) // 2
+        lc, rc = p * 2, p * 2 + 1
 
-    def _push(self, k, x, y):
-        if self.z[k] != 0:
-            d = (x + y) // 2
-            v = self.z[k]
+        self.apply(lc, self.lz[p], l, m)
+        self.apply(rc, self.lz[p], m + 1, r)
 
-            # propagate to left child
-            self.s[2 * k] += (d - x + 1) * v
-            self.z[2 * k] += v
+        self.lz[lc] = self.compose(self.lz[lc], self.lz[p])
+        self.lz[rc] = self.compose(self.lz[rc], self.lz[p])
 
-            # propagate to right child
-            self.s[2 * k + 1] += (y - d) * v
-            self.z[2 * k + 1] += v
+        self.lz[p] = self.LID
 
-            self.z[k] = 0
+    def build(self, a, p=1, l=0, r=None):
+        if r is None:
+            r = self.n - 1
+        if l == r:
+            self.st[p] = a[l]
+            return
+        m = (l + r) // 2
+        self.build(a, p * 2, l, m)
+        self.build(a, p * 2 + 1, m + 1, r)
+        self.st[p] = self.merge(self.st[p * 2], self.st[p * 2 + 1])
 
-    def add(self, a, b, u):
-        self._add(a, b, u, 1, 0, self.n - 1)
-
-    def _add(self, a, b, u, k, x, y):
-        if b < x or a > y:
+    def upd(self, ql, qr, v, p=1, l=0, r=None):
+        if r is None:
+            r = self.n - 1
+        if qr < l or r < ql:
+            return
+        if ql <= l and r <= qr:
+            self.apply(p, v, l, r)
+            self.lz[p] = self.compose(self.lz[p], v)
             return
 
-        if a <= x and y <= b:
-            self.s[k] += (y - x + 1) * u # idhar tak propagate ho jaega
-            self.z[k] += u # propagate down nai hua
-            return
+        self.push(p, l, r)
+        m = (l + r) // 2
+        self.upd(ql, qr, v, p * 2, l, m)
+        self.upd(ql, qr, v, p * 2 + 1, m + 1, r)
+        self.st[p] = self.merge(self.st[p * 2], self.st[p * 2 + 1])
 
-        self._push(k, x, y)
+    def qry(self, ql, qr, p=1, l=0, r=None):
+        if r is None:
+            r = self.n - 1
+        if qr < l or r < ql:
+            return self.ID
+        if ql <= l and r <= qr:
+            return self.st[p]
 
-        d = (x + y) // 2
-        self._add(a, b, u, 2 * k, x, d)
-        self._add(a, b, u, 2 * k + 1, d + 1, y)
-        self.s[k] = self.s[2 * k] + self.s[2 * k + 1]
+        self.push(p, l, r)
+        m = (l + r) // 2
+        left = self.qry(ql, qr, p * 2, l, m)
+        right = self.qry(ql, qr, p * 2 + 1, m + 1, r)
+        return self.merge(left, right)
 
-    def sum(self, a, b):
-        return self._sum(a, b, 1, 0, self.n - 1)
 
-    def _sum(self, a, b, k, x, y):
-        if b < x or a > y:
-            return 0
+# ===== Example usage (same as your C++) =====
+if __name__ == "__main__":
+    n = int(input())
+    a = list(map(int, input().split()))
 
-        if a <= x and y <= b:
-            return self.s[k]
+    st = LazySegTree(n, ID=0, LID=0)
+    st.build(a)
 
-        self._push(k, x, y)
-
-        d = (x + y) // 2
-        return (
-            self._sum(a, b, 2 * k, x, d)
-            + self._sum(a, b, 2 * k + 1, d + 1, y)
-        )
-
+    st.upd(2, 5, 3)      # add +3 on [2..5]
+    print(st.qry(0, 4))  # sum query
 
 
 

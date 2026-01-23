@@ -23,9 +23,9 @@ class TarjanSCC:
         for v in self.graph[u]:
             if self.ids[v] == -1:  # not visited
                 self.dfs(v)
+            if self.on_stack[v]:
                 self.low[u] = min(self.low[u], self.low[v])
-            elif self.on_stack[v]:
-                self.low[u] = min(self.low[u], self.ids[v])
+
 
         # root of SCC
         if self.ids[u] == self.low[u]:

@@ -35,10 +35,8 @@ class RangeBIT:
         if 0 <= i < self.n:
             bit.add(i, delta)
 
-    # prefix sum of a[0..x]
     def prefix_sum(self, x: int) -> int:
         return (x + 1) * self.B1.sum(x) - self.B2.sum(x)
 
-    # range sum of a[l..r]
     def range_sum(self, l: int, r: int) -> int:
         return self.prefix_sum(r) - (self.prefix_sum(l - 1) if l > 0 else 0)
