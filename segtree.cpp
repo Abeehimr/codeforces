@@ -8,32 +8,28 @@ struct LazySegTree {
     vector<Node> st;
     vector<Lazy> lz;
 
-    Node ID;     // identity for merge
-    Lazy LID;    // identity for lazy
+    Node ID;
+    Lazy LID;
 
     LazySegTree(int n, Node ID, Lazy LID) : n(n), ID(ID), LID(LID) {
         st.assign(4 * n, ID);
         lz.assign(4 * n, LID);
     }
 
-    // ===== CUSTOMIZE THESE 3 =====
     Node merge(const Node &a, const Node &b) {
-        // example: return a + b;
-        return a; // replace
+        // merge valuee
+        return a + b;
     }
 
     void apply(int p, const Lazy &v, int l, int r) {
         // apply lazy v to st[p] on segment [l..r]
-        // example for range add sum:
-        // st[p] += (r - l + 1) * v;
+        st[p] += (r - l + 1) * v;
     }
 
     Lazy compose(const Lazy &oldV, const Lazy &newV) {
         // how to combine lazies:
-        // example for range add: old + new
-        return oldV; // replace
+        return oldV + newV;
     }
-    // =============================
 
     void push(int p, int l, int r) {
         if (lz[p] == LID) return;
@@ -52,8 +48,10 @@ struct LazySegTree {
     void build(const vector<Node> &a, int p, int l, int r) {
         if (l == r) { st[p] = a[l]; return; }
         int m = (l + r) >> 1;
+
         build(a, p << 1, l, m);
         build(a, p << 1 | 1, m + 1, r);
+
         st[p] = merge(st[p << 1], st[p << 1 | 1]);
     }
 
@@ -87,29 +85,30 @@ struct LazySegTree {
     Node qry(int l, int r) { return qry(l, r, 1, 0, n - 1); }
 };
 
+using Node = long long;
+using Lazy = long long;
+struct Seg : LazySegTree<Node, Lazy> {
+    Seg(int n) : LazySegTree(n, 0LL, 0LL) {}
 
+    Node merge(const Node &a, const Node &b) {
+        return a + b;
+    }
+    void apply(int p, const Lazy &v, int l, int r) {
+        st[p] += (r - l + 1) * v;
+    }
+    Lazy compose(const Lazy &oldV, const Lazy &newV) {
+        return oldV + newV;
+    }
+};
 
 int main () {
-    using Node = long long;
-    using Lazy = long long;
+
 
     int n; cin >> n;
     vector<Node> a(n);
     for (auto &x : a) cin >> x;
 
-    struct Seg : LazySegTree<Node, Lazy> {
-        Seg(int n) : LazySegTree(n, 0LL, 0LL) {}
 
-        Node merge(const Node &a, const Node &b) { return a + b; }
-
-        void apply(int p, const Lazy &v, int l, int r) {
-            st[p] += (r - l + 1) * v;
-        }
-
-        Lazy compose(const Lazy &oldV, const Lazy &newV) {
-            return oldV + newV;
-        }
-    };
 
     Seg st(n);
     st.build(a);

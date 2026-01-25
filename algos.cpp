@@ -53,62 +53,44 @@ void tarjan(int N, vector<vi>& adj, vector<vi>& out) {
 void bridges(int N, vector<vi>& adj, vector<pii>& out) {
     vi id(N, -1), low(N, -1);
     int cur = 0;
-
     function<void(int,int)> dfs = [&](int u, int parent) {
         id[u] = low[u] = cur++;
-
         for (int v : adj[u]) {
             if (v == parent) continue;
 
             if (id[v] == -1) {
                 dfs(v, u);
                 low[u] = min(low[u], low[v]);
-
-                // BRIDGE CONDITION
                 if (low[v] > id[u]) {
                     out.push_back({u, v});
                 }
             } else {
-                // Back-edge
                 low[u] = min(low[u], id[v]);
             }
         }
     };
-
     rep(i,0,N) if (id[i] == -1) dfs(i, -1);
 }
 
 void articulation_points(int N, vector<vi>& adj, vb& is_cut) {
     vi id(N, -1), low(N, -1);
     int cur = 0;
-
     function<void(int,int)> dfs = [&](int u, int parent) {
         id[u] = low[u] = cur++;
         int children = 0;
-
         for (int v : adj[u]) {
             if (v == parent) continue;
-
             if (id[v] == -1) {
                 children++;
                 dfs(v, u);
                 low[u] = min(low[u], low[v]);
-
-                // CUT POINT CONDITION (non-root)
                 if (parent != -1 && low[v] >= id[u]) {
                     is_cut[u] = true;
                 }
-            } else {
-                low[u] = min(low[u], id[v]);
-            }
+            } else low[u] = min(low[u], id[v]);
         }
-
-        // CUT POINT CONDITION (root)
-        if (parent == -1 && children > 1) {
-            is_cut[u] = true;
-        }
+        if (parent == -1 && children > 1) is_cut[u] = true;
     };
-
     rep(i,0,N) if (id[i] == -1) dfs(i, -1);
 }
 

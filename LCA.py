@@ -65,3 +65,23 @@ class LCA:
             if diff & (1 << i):
                 b = self.up[b][i]
         return b
+    
+    def is_ancestor(self, a, b):
+        return self.get_lca(a, b) == a
+    
+    def jump(self, u, v, k):
+        w = self.get_lca(u, v)
+        du = self.depth[u] - self.depth[w]
+        dv = self.depth[v] - self.depth[w]
+        if k <= du:
+            return self.kth_ancestor(u, k)
+        k -= du
+        # now move down from w towards v: equivalent to going up from v
+        return self.kth_ancestor(v, dv - k)
+
+    def kth_ancestor(self, u, k):
+        for i in range(self.LOG):
+            if u == -1: break
+            if k & (1 << i):
+                u = self.up[u][i]
+        return u

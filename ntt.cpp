@@ -4,7 +4,6 @@ using namespace std;
 using ll = long long;
 const ll MOD = 998244353;
 const ll G = 3;
-
 ll modpow(ll a, ll e) {
     ll r = 1;
     while (e) {
@@ -14,7 +13,6 @@ ll modpow(ll a, ll e) {
     }
     return r;
 }
-
 void ntt(vector<ll> & a, bool invert) {
     int n = a.size();
     static vector<int> rev;
@@ -38,10 +36,8 @@ void ntt(vector<ll> & a, bool invert) {
             k++;
         }
     }
-
     for (int i = 0; i < n; i++)
-        if (i < rev[i])
-            swap(a[i], a[rev[i]]);
+        if (i < rev[i]) swap(a[i], a[rev[i]]);
 
     for (int len = 1; len < n; len <<= 1) {
         for (int i = 0; i < n; i += 2*len) {
@@ -53,22 +49,18 @@ void ntt(vector<ll> & a, bool invert) {
             }
         }
     }
-
     if (invert) {
         reverse(a.begin()+1, a.end());
         ll inv_n = modpow(n, MOD-2);
-        for (ll & x : a)
-            x = x * inv_n % MOD;
+        for (ll & x : a) x = x * inv_n % MOD;
     }
 }
-
 vector<ll> multiply_ntt(vector<ll> &a, vector<ll> &b) {
     vector<ll> fa(a.begin(), a.end()), fb(b.begin(), b.end());
     int n = 1;
     while (n < (int)a.size() + (int)b.size()) n <<= 1;
     fa.resize(n);
     fb.resize(n);
-
     ntt(fa, false);
     ntt(fb, false);
     for (int i = 0; i < n; i++)

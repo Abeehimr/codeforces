@@ -57,18 +57,14 @@ lp = [i for i in range(2,mx) if p[i] == i]
 
 ##############
 N =5_000_001
-is_prime = [True] * N
+lsp = list(range(N))
 primes = []
-is_prime[0] = is_prime[1] = False
 for i in range(2, N):
-    if is_prime[i]:  
-        primes.append(i)
+    if lsp[i] == i: primes.append(i)
     for p in primes:
-        if i * p >= N:
-            break
-        is_prime[i * p] = False
-        if i % p == 0:
-            break  # Ensures each number is marked only once by its smallest prime
+        if i * p >= N: break
+        lsp[i * p] = p
+        if i % p == 0: break
 #############
 
 
@@ -163,3 +159,16 @@ def compute_totient(n):
     if n > 1:
         result -= result // n
     return result
+
+
+def mobius_sieve(n):
+    mobius = [1] * (n + 1)
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+    for i in range(2, n + 1):
+        if is_prime[i]:
+            for j in range(i * 2, n + 1, i): is_prime[j] = False
+            for j in range(i, n + 1, i): mobius[j] *= -1
+            for j in range(i*i, n + 1, i*i): mobius[j] = 0
+    mobius[0] = 0
+    return mobius

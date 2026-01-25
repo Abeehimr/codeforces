@@ -3,7 +3,6 @@ using namespace std;
 
 using cd = complex<double>;
 const double PI = acos(-1);
-
 void fft(vector<cd> & a, bool invert) {
     int n = a.size();
     static vector<int> rev;
@@ -28,10 +27,8 @@ void fft(vector<cd> & a, bool invert) {
             k++;
         }
     }
-
     for (int i = 0; i < n; i++)
-        if (i < rev[i])
-            swap(a[i], a[rev[i]]);
+        if (i < rev[i]) swap(a[i], a[rev[i]]);
 
     for (int len = 1; len < n; len <<= 1) {
         for (int i = 0; i < n; i += 2*len) {
@@ -43,11 +40,9 @@ void fft(vector<cd> & a, bool invert) {
             }
         }
     }
-
     if (invert) {
         reverse(a.begin()+1, a.end());
-        for (cd & x : a)
-            x /= n;
+        for (cd & x : a) x /= n;
     }
 }
 

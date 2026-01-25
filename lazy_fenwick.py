@@ -23,7 +23,7 @@ class RangeBIT:
         self.n = n
         self.B1 = Fenwick(n)
         self.B2 = Fenwick(n)
-
+        
     # add `val` to range [l, r] (0-indexed)
     def range_add(self, l: int, r: int, val: int):
         self._add(self.B1, l, val)
@@ -32,11 +32,11 @@ class RangeBIT:
         self._add(self.B2, r + 1, -val * (r + 1))
 
     def _add(self, bit: Fenwick, i: int, delta: int):
-        if 0 <= i < self.n:
-            bit.add(i, delta)
+        if 0 <= i < self.n: bit.add(i, delta)
 
     def prefix_sum(self, x: int) -> int:
+        if x < 0: return 0
         return (x + 1) * self.B1.sum(x) - self.B2.sum(x)
 
     def range_sum(self, l: int, r: int) -> int:
-        return self.prefix_sum(r) - (self.prefix_sum(l - 1) if l > 0 else 0)
+        return self.prefix_sum(r) - self.prefix_sum(l - 1)
