@@ -5,9 +5,10 @@ class Line:
         return self.m * x + self.c
 
 class LiChaoTree:
-    def __init__(self, min_x, max_x):
+    def __init__(self, min_x, max_x, get_min=True):
         self.min_x, self.max_x = min_x, max_x
         self.tree = {}
+        self.get_min = get_min
 
     def add_line(self, new):
         l, r, node = self.min_x, self.max_x, 1
@@ -19,9 +20,13 @@ class LiChaoTree:
             mid = (l + r) // 2
             left_new, left_cur = new.eval(l), cur.eval(l)
             mid_new, mid_cur = new.eval(mid), cur.eval(mid)
-            if mid_new < mid_cur:
+            left_better = left_new < left_cur if self.get_min else left_new > left_cur
+            mid_better = mid_new < mid_cur if self.get_min else mid_new > mid_cur
+            
+            if mid_better:
                 self.tree[node], new = new, cur
-            if left_new < left_cur != mid_new < mid_cur:
+
+            if left_better != mid_better:
                 node = node * 2
                 r = mid
             else:
@@ -32,7 +37,11 @@ class LiChaoTree:
         l, r, node = self.min_x, self.max_x, 1
         best = float('inf')
         while l <= r and node in self.tree:
-            best = min(best, self.tree[node].eval(x))
+            if self.get_min:
+                best = min(best, self.tree[node].eval(x))
+            else:
+                best = max(best, self.tree[node].eval(x))
+                
             mid = (l + r) // 2
             if x <= mid:
                 node = node * 2

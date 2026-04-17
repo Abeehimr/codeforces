@@ -1,35 +1,4 @@
 n = 10
-import sys
-def ask(a,b):
-    print(f'? {a} {b}')
-    sys.stdout.flush()
-    o = int(input().strip())
-    if o == -1: quit()
-    return o
-
-par = [i for i in range(n)]
-rank = [0]*n
-
-def find(x):
-    p = x
-    while par[p] != p:
-        p = par[p]
-    while par[x] != x:
-        par[x] , x = p , par[x]
-    return p
-
-def union(x,y):
-    px,py = find(x),find(y)
-    if px == py:
-        return False
-    if rank[px] > rank[py]:
-        par[py] = px
-    else:
-        par[px] = py
-        if rank[px] == rank[py]:
-            rank[py] += 1
-    return True
-
 
 #2d prefix sum
 def prefixSum2D(mat):
@@ -54,30 +23,7 @@ def rangeSum(mat, r1, c1, r2, c2):
     if r1 > 0 and c1 > 0:
         sm += mat[r1-1][c1-1]
     return sm
-
-class Fenwick_Tree:
-    def __init__(self, n: int) -> None:
-        self.tree = [0]*n
-        self.n = n
-
-
-
-    def sum(self,i: int) -> int:
-        out = 0
-        while i >= 0:
-            out += self.tree[i]
-            i = (i&(i+1))-1
-        return out
-
-    def add(self,i: int , v: int) -> None:        
-        while i < self.n:
-            self.tree[i] += v
-            i |= i + 1
-
-
-
     
-
 def nextPermutation(nums):
     i = len(nums) - 2
     while(nums[i] >= nums[i+1] and i > -1):
@@ -92,55 +38,8 @@ def nextPermutation(nums):
     nums[i+1:] = nums[i+1:][::-1]
 
 
-class PolynomialHash:
-    def __init__(self, s: str, A = 911382323, B = 972663749):
-        self.s = s
-        self.A = A
-        self.B = B
-        self.n = len(s)
-        self.h = [0] * self.n
-        self.p = [0] * self.n
-        self._precompute()
-    
-    def _precompute(self):
-        """Precompute hash values and power values."""
-        self.h[0] = ord(self.s[0]) % self.B
-        self.p[0] = 1
-        for i in range(1, self.n):
-            self.p[i] = (self.p[i - 1] * self.A) % self.B
-            self.h[i] = (self.h[i - 1] * self.A + ord(self.s[i])) % self.B
-    
-    def get_hash(self, a: int, b: int) -> int:
-        """Get the hash of substring s[a...b]."""
-        if a == 0:
-                return self.h[b]
-        return (self.h[b] - self.h[a - 1] * self.p[b - a + 1]) % self.B
+
     
 
 
-class Fenwick_Tree_2D:
-    def __init__(self,n,m):
-        self.n, self.m = n, m
-        self.tree = [[0] * (m + 1) for _ in range(n + 1)]
-    def query(self, x, y):
-        sum_val = 0
-        i = x
-        while i >= 0:
-            j = y
-            while j >= 0:
-                sum_val += self.tree[i][j]
-                j = (j & (j + 1)) - 1
-            i = (i & (i + 1)) - 1
-        return sum_val
 
-    def update(self, x, y, delta):
-        i = x
-        while i < self.n:
-            j = y
-            while j < self.m:
-                self.tree[i][j] += delta
-                j |= j + 1
-            i |= i + 1
-
-    def range_query(self, x1, y1, x2, y2):
-        return (self.query(x2, y2) - self.query(x1 - 1, y2) - self.query(x2, y1 - 1) + self.query(x1 - 1, y1 - 1))

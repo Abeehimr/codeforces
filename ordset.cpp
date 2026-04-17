@@ -1,14 +1,22 @@
 #include <bits/stdc++.h>
-using namespace std;
-
 #include <bits/extc++.h>
+using namespace std;
 using namespace __gnu_pbds;
+
 template<class T>
-using Tree = tree<T, null_type, less<T>, rb_tree_tag,
+using OrdSet = tree<T, null_type, less<T>, rb_tree_tag,
 tree_order_statistics_node_update>;
 
+using OrdMultiset = tree<int, null_type, less_equal<int>, rb_tree_tag,
+tree_order_statistics_node_update>;
+
+using OrdMap = tree<int, int, less<int>, rb_tree_tag,
+tree_order_statistics_node_update>;
+
+
+
 int main() {
-    Tree<int> os;
+    OrdSet<int> os;
     auto res = os.insert(5); // returns pair<iterator,bool>
     cout << res.second << "\n";   // true if inserted
     cout << *res.first << "\n";   // iterator to element (5)

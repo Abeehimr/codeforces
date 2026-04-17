@@ -1,5 +1,10 @@
 from sys import stdin
 input = stdin.readline
+from bisect import bisect_left, bisect_right
+from math import gcd
+from itertools import accumulate
+from collections import defaultdict, Counter, deque
+from heapq import heappush, heappop, heapify
 
 INF = float('inf')
 MOD = 1_000_000_007
