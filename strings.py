@@ -62,15 +62,18 @@ def border(s):
 
 def kmp(s,t):
     """
-    Returns True if the string t is a substring of the string s, False otherwise.
+    Returns cnt of occurrences of the string t in the string s.
     """
     pi = border(t)
     j = 0
+    o = 0
     for i in range(len(s)):
         while j > 0 and s[i] != t[j]: j = pi[j-1]
         if s[i] == t[j]: j += 1
-        if j == len(t): return True
-    return False
+        if j == len(t):
+            o += 1
+            j = pi[j-1]
+    return o
 
 def zfunc(s):
     """
@@ -114,3 +117,4 @@ lcp = lcp_array("banana", sa)
 print("Suffix Array:", sa)
 print("LCP Array:", lcp)
 print("Border Array:", border("banana"))
+print("KMP:", kmp("banana", "a"))

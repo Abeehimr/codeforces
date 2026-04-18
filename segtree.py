@@ -115,7 +115,45 @@ class LazySegTree:
         return self.merge(left, right)
 
 
-# ===== Example usage (same as your C++) =====
+class Node:
+    __slots__ = ('sum', 'left', 'right')
+    def __init__(self, s=0, l=None, r=None):
+        self.sum = s
+        self.left = l
+        self.right = r
+
+def build(l, r):
+    if l == r:
+        return Node(0)
+    m = (l + r) // 2
+    left = build(l, m)
+    right = build(m + 1, r)
+    return Node(0, left, right)
+
+
+def update(prev, l, r, pos, val):
+    if l == r:
+        return Node(val)
+    m = (l + r) // 2
+    if pos <= m:
+        nl = update(prev.left, l, m, pos, val)
+        return Node(nl.sum + prev.right.sum, nl, prev.right)
+    else:
+        nr = update(prev.right, m + 1, r, pos, val)
+        return Node(prev.left.sum + nr.sum, prev.left, nr)
+
+
+def query(node, l, r, ql, qr):
+    if qr < l or r < ql:
+        return 0
+    if ql <= l and r <= qr:
+        return node.sum
+    m = (l + r) // 2
+    return query(node.left, l, m, ql, qr) + \
+           query(node.right, m + 1, r, ql, qr)
+
+
+
 if __name__ == "__main__":
     n = int(input())
     a = list(map(int, input().split()))
@@ -127,67 +165,7 @@ if __name__ == "__main__":
     print(st.qry(0, 4))  # sum query
 
 
-class PersistantNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
 
-class PersistantSegTree:
-    def __init__(self, n):
-        self.n = n
-        self.T = [PersistantNode()]
-
-    def build(self, arr, node=0, l=0, r=None):
-        if r is None:
-            r = self.n - 1
-        if l == r:
-            self.T[node].val = arr[l]
-            return
-        m = (l + r) // 2
-        self.T[node].left = len(self.T)
-        self.T.append(PersistantNode())
-        self.build(arr, self.T[node].left, l, m)
-
-        self.T[node].right = len(self.T)
-        self.T.append(PersistantNode())
-        self.build(arr, self.T[node].right, m + 1, r)
-
-        self.T[node].val = self.T[self.T[node].left].val + self.T[self.T[node].right].val
-    
-    def update(self, idx, val, node=0, l=0, r=None):
-        if r is None:
-            r = self.n - 1
-        if l == r:
-            new_node = PersistantNode(val)
-            self.T.append(new_node)
-            return len(self.T) - 1
-        m = (l + r) // 2
-        new_node = PersistantNode()
-        self.T.append(new_node)
-        new_idx = len(self.T) - 1
-
-        if idx <= m:
-            self.T[new_idx].left = self.update(idx, val, self.T[node].left, l, m)
-            self.T[new_idx].right = self.T[node].right
-        else:
-            self.T[new_idx].left = self.T[node].left
-            self.T[new_idx].right = self.update(idx, val, self.T[node].right, m + 1, r)
-
-        self.T[new_idx].val = self.T[self.T[new_idx].left].val + self.T[self.T[new_idx].right].val
-        return new_idx
-    
-    def query(self, ql, qr, node=0, l=0, r=None):
-        if r is None:
-            r = self.n - 1
-        if qr < l or r < ql:
-            return 0
-        if ql <= l and r <= qr:
-            return self.T[node].val
-        m = (l + r) // 2
-        left_sum = self.query(ql, qr, self.T[node].left, l, m)
-        right_sum = self.query(ql, qr, self.T[node].right, m + 1, r)
-        return left_sum + right_sum
 
 
 
