@@ -60,6 +60,9 @@ class LazySegTree:
     # =============================
 
     def push(self, p, l, r):
+        """
+        Push the lazy value at node p down to its children.
+        """
         if self.lz[p] == self.LID:
             return
         m = (l + r) // 2

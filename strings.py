@@ -111,7 +111,39 @@ class PolynomialHash:
         if a == 0:
                 return self.h[b]
         return (self.h[b] - self.h[a - 1] * self.p[b - a + 1]) % self.B
+    
+    def lcp(self, i: int, j: int) -> int:
+        """
+        get the longest common prefix of substrings s[i...] and s[j...]
+        using binary search on the length of the prefix and comparing hashes.
+        """
+        lo, hi = 0, self.n - max(i, j)
+        while lo < hi:
+            mid = (lo + hi + 1) // 2
+            if self.get_hash(i, i + mid - 1) == self.get_hash(j, j + mid - 1):
+                lo = mid
+            else:
+                hi = mid - 1
+        return lo
 
+    def compare(self, l1, r1, l2, r2):
+        """
+        -1 if s[l1...r1] < s[l2...r2]
+        0 if s[l1...r1] == s[l2...r2]
+        1 if s[l1...r1] > s[l2...r2]
+        """
+        len1 = r1 - l1 + 1
+        len2 = r2 - l2 + 1
+
+        l = self.lcp(l1, l2)
+
+        if l >= min(len1, len2):
+            if len1 == len2:
+                return 0
+            return -1 if len1 < len2 else 1
+
+        return -1 if self.s[l1 + l] < self.s[l2 + l] else 1
+    
 sa = suffix_array("banana")
 lcp = lcp_array("banana", sa)
 print("Suffix Array:", sa)
