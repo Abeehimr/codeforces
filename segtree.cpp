@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const long long MOD = 998244353;
 
 template <class Node, class Lazy>
 struct LazySegTree {
@@ -85,16 +86,19 @@ struct LazySegTree {
     Node qry(int l, int r) { return qry(l, r, 1, 0, n - 1); }
 };
 
-using Node = long long;
+using Node = pair<long long,long long>;
 using Lazy = long long;
 struct Seg : LazySegTree<Node, Lazy> {
-    Seg(int n) : LazySegTree(n, 0LL, 0LL) {}
+    Seg(int n) : LazySegTree(n, Node(0LL,0LL), 0LL) {}
 
     Node merge(const Node &a, const Node &b) {
-        return a + b;
+        return Node((a.first + b.first)%MOD, (a.second+b.second)%MOD);
     }
     void apply(int p, const Lazy &v, int l, int r) {
-        st[p] += (r - l + 1) * v;
+        st[p].second += (r - l + 1)*(v*v%MOD)%MOD + st[p].first*2*v%MOD;
+        st[p].second %= MOD;
+        st[p].first += (r - l + 1) * v;
+        st[p].first %= MOD;
     }
     Lazy compose(const Lazy &oldV, const Lazy &newV) {
         return oldV + newV;
@@ -104,16 +108,16 @@ struct Seg : LazySegTree<Node, Lazy> {
 int main () {
 
 
-    int n; cin >> n;
-    vector<Node> a(n);
-    for (auto &x : a) cin >> x;
+    // int n; cin >> n;
+    // vector<Node> a(n);
+    // for (auto &x : a) cin >> x;
 
 
 
-    Seg st(n);
-    st.build(a);
+    // Seg st(n);
+    // st.build(a);
 
-    st.upd(2, 5, 3);         // add +3 on [2..5]
-    cout << st.qry(0, 4);    // sum query
+    // st.upd(2, 5, 3);         // add +3 on [2..5]
+    // cout << st.qry(0, 4);    // sum query
 
 }

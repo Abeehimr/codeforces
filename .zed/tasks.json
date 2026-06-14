@@ -1,0 +1,14 @@
+[
+  {
+    "label": "CP",
+    "command": "./.zed/cp.sh \"$ZED_FILE\" 2",
+    "reveal": "never",
+  },
+  {
+    "label": "Paste clipboard to input.txt",
+    "command": "wl-paste > input.txt",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "never",
+  }
+]
