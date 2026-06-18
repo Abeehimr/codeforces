@@ -3,7 +3,7 @@ class dsu:
         self.par = [i for i in range(n)]
         self.rank = [0]*n
 
-    def find(self, x):
+    def find(self, x: int):
         p = x
         while self.par[p] != p:
             p = self.par[p]
@@ -11,7 +11,7 @@ class dsu:
             self.par[x], x = p, self.par[x]
         return p
 
-    def union(self, x, y):
+    def union(self, x: int, y: int):
         x, y = self.find(x), self.find(y)
         if x == y:
             return False

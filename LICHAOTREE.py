@@ -20,6 +20,7 @@ class LiChaoTree:
             mid = (l + r) // 2
             left_new, left_cur = new.eval(l), cur.eval(l)
             mid_new, mid_cur = new.eval(mid), cur.eval(mid)
+            
             left_better = left_new < left_cur if self.get_min else left_new > left_cur
             mid_better = mid_new < mid_cur if self.get_min else mid_new > mid_cur
             
